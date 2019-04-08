@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
+{% block navigation %}
+    {% include 'posts/navigation.html' %}
+{% endblock %}
 {% block content %}
     {% for post in posts %}
-    <div class="card">
-        <div class="card-header">Created by {{ post.author }}</div>
+    <div class="card mt-2">
         <div class="card-body">
             <h5 class="card-title">{{ post.title }}</h5>
             <p class="card-text">{{ post.body|truncatechars:40 }}</p>
@@ -11,13 +13,17 @@
     </div>
     {% endfor %}
     {% if is_paginated %}
-    <ul class="pagination">
+    <ul class="pagination pagination-lg justify-content-center mt-2">
         {% for i in paginator.page_range %}
             {% if i <= page_obj.number|add:5 and i >= page_obj.number|add:-5 %}
                 {% if page_obj.number == i %}
-                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                <li class="page-item active" aria-current="page">
+                    <span  class="page-link">
+                        {{ i }} <span class="sr-only">(current)</span>
+                    </span>
+                </li>
                 {% else %}
-                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                 {% endif %}
             {% endif %}
         {% endfor %}

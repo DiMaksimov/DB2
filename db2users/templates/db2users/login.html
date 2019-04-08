@@ -1,18 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        <div class="jumbotron">
-            <h1>Login</h1>
-            {% if message %}
-                <a>{{ message }}</a>
-            {% endif %}
-            <hr class="my-4">
-            <div class="form-group">
-            {{ form.as_p }}
+    {% if user.is_authenticated %}
+        <h1>Hello {{ user }}. You can now see <a href="{% url 'posts:list_view' %}"> posts</a>></h1>
+    {% else %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="jumbotron">
+                <h1>Login</h1>
+                <hr class="my-4">
+                <div class="form-group">
+                {% for elem in form.visible_fields %}
+                    <label>{{ elem.label }}:</label>
+                    <br>
+                    <p>{{ elem }}</p>
+                {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a href="{% url 'account:signup' %}" class="btn btn-primary">Sing Up</a>
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-            <a href="{% url 'account:signup' %}" class="btn btn-primary">Sing Up</a>
-        </div>
-    </form>
+        </form>
+    {% endif %}
 {% endblock %}

@@ -1,9 +1,37 @@
 {% extends 'base.html' %}
+{% block navigation %}
+    {% include 'posts/navigation.html' %}
+{% endblock %}
+{% include 'posts/navigation.html' %}
 {% block content %}
     <div class="jumbotron">
+        {% if object.post_image %}
+            <img src="{{ object.post_image.url }}" class="img-responsive">
+        {% endif %}
+
         <h1 class="display-4">{{ object.title }}</h1>
         <p class="lead">{{ object.autor }}</p>
         <hr class="my-4">
         <p>{{ object.body }}</p>
+        <form action="{% url 'posts:likes_view' id=object.id %}" method="post">{% csrf_token %}
+            <button type="submit"  {% if is_liked %}
+                class="btn btn-warning">
+            {% else %}
+                class="btn btn-primary">
+            {% endif %}
+            {{ likes_count }} liked</button>
+        </form>
     </div>
+    <a class="btn btn-default" href="{% url 'posts:comment_view' pk=post.pk %}">Add comment</a>
+    {% for comment in post.comments.all %}
+        <div class="card mt-2" style="max-width: 500px">
+            <div class="card-body">
+                <strong class="mr-auto">{{ comment.author }}</strong>
+                <small> on {{ comment.created_timestamp }}</small>
+                <p>{{ comment.comment|linebreaks }}</p>
+            </div>
+        </div>
+    {% empty %}
+        <p>No comments here yet :(</p>
+    {% endfor %}
 {% endblock %}
