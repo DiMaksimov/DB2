@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for post in posts %}
+    <div class="card">
+        <div class="card-header">Created by {{ post.author }}</div>
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-text">{{ post.body|truncatechars:40 }}</p>
+            <a href="{% url 'posts:details_view' pk=post.id %}" class="btn btn-primary">Details</a>
+        </div>
+    </div>
+    {% endfor %}
+    {% if is_paginated %}
+    <ul class="pagination">
+        {% for i in paginator.page_range %}
+            {% if i <= page_obj.number|add:5 and i >= page_obj.number|add:-5 %}
+                {% if page_obj.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}

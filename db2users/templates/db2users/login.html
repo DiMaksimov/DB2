@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="jumbotron">
+            <h1>Login</h1>
+            {% if message %}
+                <a>{{ message }}</a>
+            {% endif %}
+            <hr class="my-4">
+            <div class="form-group">
+            {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+            <a href="{% url 'account:signup' %}" class="btn btn-primary">Sing Up</a>
+        </div>
+    </form>
+{% endblock %}
